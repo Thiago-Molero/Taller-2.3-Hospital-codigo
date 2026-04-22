@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller 2.3 · Vistas · Clínica TodoSalud</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-dark: #26215C;
+    --purple-mid: #534AB7;
+    --purple-light: #EEEDFE;
+    --purple-soft: #AFA9EC;
+    --teal-dark: #085041;
+    --teal-mid: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-soft: #9FE1CB;
+    --amber-dark: #412402;
+    --amber-mid: #BA7517;
+    --amber-light: #FAEEDA;
+    --amber-soft: #FAC775;
+    --coral-dark: #4A1B0C;
+    --coral-mid: #D85A30;
+    --coral-light: #FAECE7;
+    --coral-soft: #F0997B;
+    --blue-dark: #042C53;
+    --blue-mid: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-soft: #85B7EB;
+    --green-dark: #173404;
+    --green-mid: #3B6D11;
+    --green-light: #EAF3DE;
+    --green-soft: #C0DD97;
+    --bg: #F7F5F0;
+    --card: #FFFFFF;
+    --text: #1a1a2e;
+    --muted: #6b6b8a;
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    padding: 40px 20px 60px;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--purple-dark);
+    border-radius: 20px;
+    padding: 48px 48px 40px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeDown 0.6s ease both;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: rgba(83,74,183,0.35);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(175,169,236,0.12);
+  }
+  .header-tag {
+    display: inline-block;
+    background: var(--purple-mid);
+    color: var(--purple-light);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 18px;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .header h1 span { color: var(--purple-soft); }
+  .header-sub {
+    font-size: 14px;
+    color: var(--purple-soft);
+    font-weight: 300;
+    position: relative;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .meta-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #d0cef7;
+  }
+  .meta-pill strong { color: #fff; display: block; font-size: 13px; }
+
+  /* SECTION HEADER */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .section-label .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .section-label h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .section-label .line {
+    flex: 1;
+    height: 1px;
+    opacity: 0.25;
+  }
+
+  /* WHAT IS A VIEW */
+  .view-explainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    animation: fadeUp 0.5s ease 0.1s both;
+  }
+  .view-card {
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px solid transparent;
+  }
+  .view-card .vc-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .view-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .view-card p {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+  .vc-purple { background: var(--purple-light); border-color: var(--purple-soft); }
+  .vc-purple h3 { color: var(--purple-dark); }
+  .vc-purple p { color: var(--purple-mid); }
+  .vc-teal { background: var(--teal-light); border-color: var(--teal-soft); }
+  .vc-teal h3 { color: var(--teal-dark); }
+  .vc-teal p { color: var(--teal-dark); }
+
+  /* MODELO ETAPAS */
+  .etapas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    position: relative;
+    animation: fadeUp 0.5s ease 0.15s both;
+  }
+  .etapa {
+    background: var(--card);
+    padding: 24px 20px;
+    border: 1px solid #e2e0f0;
+    position: relative;
+    text-align: center;
+  }
+  .etapa:first-child { border-radius: 14px 0 0 14px; }
+  .etapa:last-child { border-radius: 0 14px 14px 0; }
+  .etapa .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .etapa h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .etapa p { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+  .etapa-arrow {
+    position: absolute;
+    right: -14px; top: 50%;
+    transform: translateY(-50%);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid #e2e0f0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    z-index: 2;
+    color: var(--muted);
+  }
+  .e1 .num { color: var(--purple-mid); }
+  .e2 .num { color: var(--teal-mid); }
+  .e3 .num { color: var(--amber-mid); }
+
+  /* TABLAS GRID */
+  .tablas-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    animation: fadeUp 0.5s ease 0.2s both;
+  }
+  .tabla-card {
+    background: var(--amber-light);
+    border: 1px solid var(--amber-soft);
+    border-radius: 12px;
+    padding: 14px 12px;
+  }
+  .tabla-card.span2 { grid-column: span 2; }
+  .tabla-card .tc-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--amber-dark);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .tabla-card .tc-desc {
+    font-size: 11px;
+    color: var(--amber-mid);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+  .tc-rel { background: #FFF3E0; border-color: #FFCC80; }
+  .tc-rel .tc-tag { color: #6D4C41; }
+  .tc-rel .tc-desc { color: #8D6E63; }
+
+  /* DATOS BURBUJA */
+  .datos-row {
+    display: flex;
+    gap: 12px;
+    animation: fadeUp 0.5s ease 0.25s both;
+    flex-wrap: wrap;
+  }
+  .burbuja {
+    flex: 1;
+    min-width: 100px;
+    background: var(--coral-light);
+    border: 1px solid var(--coral-soft);
+    border-radius: 14px;
+    padding: 20px 12px;
+    text-align: center;
+  }
+  .burbuja .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    color: var(--coral-mid);
+    line-height: 1;
+    display: block;
+  }
+  .burbuja .lbl {
+    font-size: 12px;
+    color: var(--coral-dark);
+    margin-top: 6px;
+    display: block;
+    font-weight: 400;
+  }
+
+  /* VISTAS */
+  .vistas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeUp 0.5s ease 0.3s both;
+  }
+  .vista-row {
+    background: var(--card);
+    border: 1px solid #dce8f8;
+    border-left: 4px solid var(--blue-mid);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 16px;
+    align-items: start;
+    transition: box-shadow 0.2s;
+  }
+  .vista-row:hover { box-shadow: 0 4px 20px rgba(24,95,165,0.08); }
+  .vr-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--blue-dark);
+    word-break: break-all;
+  }
+  .vr-badge {
+    display: inline-block;
+    background: var(--blue-light);
+    color: var(--blue-mid);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .vr-desc {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .vr-result {
+    font-size: 11px;
+    color: var(--teal-dark);
+    background: var(--teal-light);
+    border-radius: 6px;
+    padding: 4px 10px;
+    margin-top: 6px;
+    display: inline-block;
+    font-weight: 500;
+  }
+
+  /* CONCLUSIÓN */
+  .conclusion {
+    background: var(--green-light);
+    border: 1px solid var(--green-soft);
+    border-radius: 16px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: start;
+    animation: fadeUp 0.5s ease 0.35s both;
+  }
+  .conclusion .cc-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 54px;
+    color: var(--green-soft);
+    line-height: 1;
+  }
+  .conclusion h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+  }
+  .conclusion ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .conclusion li {
+    font-size: 13px;
+    color: var(--green-mid);
+    font-weight: 300;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .conclusion li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--teal-mid);
+    font-size: 11px;
+    top: 2px;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+    animation: fadeUp 0.4s ease 0.4s both;
+  }
+  .footer strong { color: var(--purple-mid); }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px) {
+    .view-explainer { grid-template-columns: 1fr; }
+    .etapas { grid-template-columns: 1fr; }
+    .etapa:first-child { border-radius: 14px 14px 0 0; }
+    .etapa:last-child { border-radius: 0 0 14px 14px; }
+    .etapa-arrow { display: none; }
+    .tablas-grid { grid-template-columns: 1fr 1fr; }
+    .tabla-card.span2 { grid-column: span 1; }
+    .vista-row { grid-template-columns: 1fr; }
+    .conclusion { grid-template-columns: 1fr; }
+    .conclusion .cc-num { font-size: 36px; }
+    .header { padding: 32px 24px; }
+    .header h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-tag">Modelado de Bases de Datos · 2026</div>
+    <h1>Taller 2.3<br><span>Vistas en Oracle</span></h1>
+    <p class="header-sub">Clínica TodoSalud · Universidad Andina del Cusco · Ingeniería de Sistemas</p>
+    <div class="header-meta">
+      <div class="meta-pill"><strong>Estudiante</strong>Molero Zegarra Thiago Valentino</div>
+      <div class="meta-pill"><strong>Docente</strong>Espetia Huamanga Hugo</div>
+      <div class="meta-pill"><strong>SGBD</strong>Oracle Database</div>
+    </div>
+  </header>
+
+  <!-- ¿QUÉ ES UNA VISTA? -->
+  <section>
+    <div class="section-label">
+      <div class="dot" style="background:var(--purple-mid)"></div>
+      <h2 style="color:var(--purple-dark)">¿Qué es una vista?</h2>
+      <div class="line" style="background:var(--purple-mid)"></div>
+    </div>
+    <div class="view-explainer">
+      <div class="view-card vc-purple">
+        <h3>Tabla virtual</h3>
+        <p>Una vista es una consulta SQL almacenada que se comporta como una tabla. No guarda datos físicamente; muestra resultados calculados en tiempo real a partir de las tablas base.</p>
+      </div>
+      <div class="view-card vc-teal">
+        <h3>¿Para qué sirve?</h3>
+        <p>Simplifica el acceso a información compleja, mejora la reutilización del código SQL, protege datos sensibles y hace que las consultas sean más legibles y mantenibles.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODELO -->
+  <section>
+    <div class="section-label">
+      <div class="dot" style="background:var(--teal-mid)"></div>
+      <h2 style="color:var(--teal-dark)">Modelo de la base de datos</h2>
+      <div class="line" style="background:var(--teal-mid)"></div>
+    </div>
+    <div class="etapas">
+      <div class="etapa e1">
+        <div class="num">01</div>
+        <h3>Conceptual</h3>
+        <p>Entidades, atributos y relaciones en abstracto. Identifica: Paciente, Médico, Especialidad, Enfermedad, Diagnóstico.</p>
+        <div class="etapa-arrow">›</div>
+      </div>
+      <div class="etapa e2">
+        <div class="num">02</div>
+        <h3>Lógico</h3>
+        <p>Tablas, claves primarias y foráneas. Incluye tablas intermedias para relaciones N:M.</p>
+        <div class="etapa-arrow">›</div>
+      </div>
+      <div class="etapa e3">
+        <div class="num">03</div>
+        <h3>Físico</h3>
+        <p>Implementación en Oracle con VARCHAR2, DATE, TIMESTAMP y restricciones de integridad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLAS -->
+  <section>
+    <div class="section-label">
+      <div class="dot" style="background:var(--amber-mid)"></div>
+      <h2 style="color:var(--amber-dark)">Tablas del sistema (7)</h2>
+      <div class="line" style="background:var(--amber-mid)"></div>
+    </div>
+    <div class="tablas-grid">
+      <div class="tabla-card">
+        <span class="tc-tag">tPaciente</span>
+        <span class="tc-desc">codP · tipoDoc · nombres · apellidos · fechaNac · género</span>
+      </div>
+      <div class="tabla-card">
+        <span class="tc-tag">tMedico</span>
+        <span class="tc-desc">codM · tipoDoc · nombres · apellidos · celular · género</span>
+      </div>
+      <div class="tabla-card">
+        <span class="tc-tag">tEspecialidad</span>
+        <span class="tc-desc">codEsp · nombreEsp · descripcionEsp</span>
+      </div>
+      <div class="tabla-card">
+        <span class="tc-tag">tEnfermedad</span>
+        <span class="tc-desc">codE · nombreE · descripcionE</span>
+      </div>
+      <div class="tabla-card tc-rel">
+        <span class="tc-tag">tDiagnostico</span>
+        <span class="tc-desc">codD · fechaHora · descripcion · FK→tPaciente · FK→tMedico</span>
+      </div>
+      <div class="tabla-card tc-rel span2">
+        <span class="tc-tag">tEspecialidadDelMedico</span>
+        <span class="tc-desc">Tabla intermedia N:M · codEspM · FK→tEspecialidad · FK→tMedico · fechaObtencion</span>
+      </div>
+      <div class="tabla-card tc-rel">
+        <span class="tc-tag">tEnfermedadEnElDiag.</span>
+        <span class="tc-desc">Tabla intermedia N:M · codED · FK→tEnfermedad · FK→tDiagnostico</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATOS -->
+  <section>
+    <div class="section-label">
+      <div class="dot" style="background:var(--coral-mid)"></div>
+      <h2 style="color:var(--coral-dark)">Datos de prueba insertados</h2>
+      <div class="line" style="background:var(--coral-mid)"></div>
+    </div>
+    <div class="datos-row">
+      <div class="burbuja">
+        <span class="num">2</span>
+        <span class="lbl">Pacientes</span>
+      </div>
+      <div class="burbuja">
+        <span class="num">2</span>
+        <span class="lbl">Médicos</span>
+      </div>
+      <div class="burbuja">
+        <span class="num">4</span>
+        <span class="lbl">Especialidades</span>
+      </div>
+      <div class="burbuja">
+        <span class="num">3</span>
+        <span class="lbl">Enfermedades</span>
+      </div>
+      <div class="burbuja">
+        <span class="num">2</span>
+        <span class="lbl">Diagnósticos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISTAS -->
+  <section>
+    <div class="section-label">
+      <div class="dot" style="background:var(--blue-mid)"></div>
+      <h2 style="color:var(--blue-dark)">Vistas creadas (7)</h2>
+      <div class="line" style="background:var(--blue-mid)"></div>
+    </div>
+    <div class="vistas-list">
+
+      <div class="vista-row">
+        <div>
+          <div class="vr-name">v_MedicoEspecialidad</div>
+          <div class="vr-badge">5.1 · JOIN triple</div>
+        </div>
+        <div>
+          <div class="vr-desc">Muestra todos los médicos con sus especialidades. Combina tMedico, tEspecialidadDelMedico y tEspecialidad mediante JOIN.</div>
+        </div>
+      </div>
+
+      <div class="vista-row">
+        <div>
+          <div class="vr-name">COUNT(*) sobre v_MedicoEspecialidad</div>
+          <div class="vr-badge">5.2 · GROUP BY</div>
+        </div>
+        <div>
+          <div class="vr-desc">Agrupación por médico para contar cuántas especialidades tiene cada uno.</div>
+          <div class="vr-result">Javier Zela → 1 · Alejandra Cabral → 2</div>
+        </div>
+      </div>
+
+      <div class="vista-row">
+        <div>
+          <div class="vr-name">HAVING COUNT(*) &gt;= 2</div>
+          <div class="vr-badge">5.3 · HAVING</div>
+        </div>
+        <div>
+          <div class="vr-desc">Filtra sobre la vista anterior para mostrar únicamente los médicos con dos o más especialidades.</div>
+          <div class="vr-result">Solo: Alejandra Cabral (2 especialidades)</div>
+        </div>
+      </div>
+
+      <div class="vista-row">
+        <div>
+          <div class="vr-name">v_EnfermedadesNoDetectadas</div>
+          <div class="vr-badge">5.4 · LEFT JOIN + IS NULL</div>
+        </div>
+        <div>
+          <div class="vr-desc">LEFT JOIN entre tEnfermedad y tEnfermedadEnElDiagnostico filtrando WHERE ed.codE IS NULL para encontrar enfermedades sin diagnóstico asociado.</div>
+        </div>
+      </div>
+
+      <div class="vista-row">
+        <div>
+          <div class="vr-name">v_EspecialidadesSinMedico</div>
+          <div class="vr-badge">5.5 · LEFT JOIN + IS NULL</div>
+        </div>
+        <div>
+          <div class="vr-desc">LEFT JOIN entre tEspecialidad y tEspecialidadDelMedico. WHERE em.codEsp IS NULL devuelve especialidades sin médico asignado en la clínica.</div>
+        </div>
+      </div>
+
+      <div class="vista-row">
+        <div>
+          <div class="vr-name">COUNT(*) sobre v_EspecialidadesSinMedico</div>
+          <div class="vr-badge">5.6 · COUNT</div>
+        </div>
+        <div>
+          <div class="vr-desc">Total de especialidades vacías usando COUNT(*) sobre la vista anterior.</div>
+          <div class="vr-result">TOTAL_ESPECIALIDADES_VACIAS = 1</div>
+        </div>
+      </div>
+
+      <div class="vista-row">
+        <div>
+          <div class="vr-name">v_PacientesSinEnfermedad</div>
+          <div class="vr-badge">5.7 · SELECT DISTINCT</div>
+        </div>
+        <div>
+          <div class="vr-desc">JOIN entre tPaciente y tDiagnostico más LEFT JOIN a tEnfermedadEnElDiagnostico. SELECT DISTINCT trae pacientes con diagnóstico pero sin enfermedad vinculada.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONCLUSIONES -->
+  <section>
+    <div class="section-label">
+      <div class="dot" style="background:var(--green-mid)"></div>
+      <h2 style="color:var(--green-dark)">Conclusiones</h2>
+      <div class="line" style="background:var(--green-mid)"></div>
+    </div>
+    <div class="conclusion">
+      <div class="cc-num">✓</div>
+      <div>
+        <h3>Aprendizajes del taller</h3>
+        <ul>
+          <li>El modelado relacional (conceptual → lógico → físico) es esencial para representar sistemas reales correctamente.</li>
+          <li>Las claves primarias y foráneas garantizan la integridad referencial y evitan redundancias en los datos.</li>
+          <li>Las vistas encapsulan consultas complejas con JOIN, facilitando su reutilización y mejorando la legibilidad.</li>
+          <li>Técnicas como LEFT JOIN + IS NULL y HAVING permiten detectar registros sin relación, muy útiles para auditorías.</li>
+          <li>Se recomienda usar vistas en consultas frecuentes y documentar bien el sistema para su mantenimiento futuro.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Universidad Andina del Cusco · Facultad de Ingeniería y Arquitectura · <strong>Modelado de Bases de Datos 2026</strong></p>
+  </footer>
+
+</div>
+</body>
+</html>
+apps-fileview.texmex_20260408.09_p0
+infografia_taller_vistas.html
+Mostrando infografia_taller_vistas.html.
